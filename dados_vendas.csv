@@ -1,0 +1,51 @@
+data,vendedor,modelo,valor,origem_lead,status
+2026-01-03,Marcos Oliveira,Onix,72500,Instagram,Vendido
+2026-01-05,Fernanda Lima,HB20,68900,Site,Perdido
+2026-01-07,Rafael Souza,Strada,112000,Indicação,Vendido
+2026-01-08,Juliana Costa,Compass,189900,Instagram,Em negociação
+2026-01-10,Marcos Oliveira,Argo,79800,Walk-in,Vendido
+2026-01-12,Thiago Mendes,Cronos,94500,Site,Perdido
+2026-01-14,Fernanda Lima,T-Cross,174900,Indicação,Vendido
+2026-01-15,Ana Paula Ferreira,Onix,74200,Instagram,Em negociação
+2026-01-17,Rafael Souza,HB20,71300,Walk-in,Vendido
+2026-01-20,Juliana Costa,Pulse,139900,Site,Vendido
+2026-01-22,Thiago Mendes,Strada,115000,Indicação,Perdido
+2026-01-24,Ana Paula Ferreira,Compass,192000,Instagram,Vendido
+2026-01-27,Marcos Oliveira,Kicks,184500,Walk-in,Em negociação
+2026-01-29,Fernanda Lima,Onix,73100,Site,Vendido
+2026-02-02,Rafael Souza,Argo,81200,Indicação,Vendido
+2026-02-04,Juliana Costa,HB20,69800,Instagram,Perdido
+2026-02-06,Thiago Mendes,Cronos,96000,Walk-in,Vendido
+2026-02-08,Ana Paula Ferreira,T-Cross,177500,Site,Em negociação
+2026-02-10,Marcos Oliveira,Strada,118000,Indicação,Vendido
+2026-02-12,Fernanda Lima,Compass,195000,Instagram,Perdido
+2026-02-14,Rafael Souza,Pulse,141000,Walk-in,Vendido
+2026-02-17,Juliana Costa,Onix,75500,Site,Vendido
+2026-02-19,Thiago Mendes,Kicks,187000,Indicação,Em negociação
+2026-02-21,Ana Paula Ferreira,HB20,70400,Instagram,Vendido
+2026-02-24,Marcos Oliveira,Argo,82700,Walk-in,Perdido
+2026-02-26,Fernanda Lima,Strada,113500,Site,Vendido
+2026-03-01,Rafael Souza,Compass,191000,Indicação,Vendido
+2026-03-03,Juliana Costa,T-Cross,176000,Instagram,Perdido
+2026-03-05,Thiago Mendes,Onix,76200,Walk-in,Vendido
+2026-03-07,Ana Paula Ferreira,Cronos,97500,Site,Em negociação
+2026-03-10,Marcos Oliveira,Pulse,143000,Indicação,Vendido
+2026-03-12,Fernanda Lima,HB20,72000,Instagram,Vendido
+2026-03-14,Rafael Souza,Kicks,188500,Walk-in,Perdido
+2026-03-17,Juliana Costa,Argo,84100,Site,Vendido
+2026-03-19,Thiago Mendes,Strada,116500,Indicação,Em negociação
+2026-03-21,Ana Paula Ferreira,Compass,194000,Instagram,Vendido
+2026-03-24,Marcos Oliveira,Onix,77000,Walk-in,Vendido
+2026-03-26,Fernanda Lima,T-Cross,179000,Site,Perdido
+2026-03-28,Rafael Souza,HB20,71800,Indicação,Vendido
+2026-04-01,Juliana Costa,Pulse,145000,Instagram,Vendido
+2026-04-03,Thiago Mendes,Argo,85500,Walk-in,Em negociação
+2026-04-05,Ana Paula Ferreira,Strada,119000,Site,Vendido
+2026-04-07,Marcos Oliveira,Compass,197000,Indicação,Perdido
+2026-04-09,Fernanda Lima,Cronos,98800,Instagram,Vendido
+2026-04-12,Rafael Souza,Kicks,190000,Walk-in,Vendido
+2026-04-14,Juliana Costa,Onix,78300,Site,Em negociação
+2026-04-16,Thiago Mendes,HB20,73500,Indicação,Vendido
+2026-04-18,Ana Paula Ferreira,T-Cross,181000,Instagram,Perdido
+2026-04-21,Marcos Oliveira,Pulse,147000,Walk-in,Vendido
+2026-04-23,Fernanda Lima,Strada,121000,Site,Em negociação
