@@ -10,6 +10,13 @@ MESES_PT = {
     9: "Set", 10: "Out", 11: "Nov", 12: "Dez",
 }
 
+COR_STATUS = {
+    "Vendido": "#22C55E",
+    "Em negociação": "#F59E0B",
+    "Perdido": "#EF4444",
+}
+
+
 @st.cache_data
 def load_data():
     df = pd.read_csv("dados_vendas.csv", parse_dates=["data"])
@@ -21,9 +28,9 @@ def load_data():
     df["mes_sort"] = df["data"].dt.to_period("M").astype(str)
     return df
 
+
 df_orig = load_data()
 
-# Meses disponíveis em ordem cronológica
 meses_ordem = (
     df_orig[["mes_sort", "mes_label"]]
     .drop_duplicates()
@@ -31,7 +38,7 @@ meses_ordem = (
     .tolist()
 )
 
-# ── Sidebar com filtros ────────────────────────────────────────────────────────
+# ── Sidebar ────────────────────────────────────────────────────────────────────
 with st.sidebar:
     st.header("Filtros")
 
@@ -48,7 +55,7 @@ with st.sidebar:
         default=vendedores_disp,
     )
 
-# Aplicar filtros
+# Filtros aplicados globalmente — todas as abas usam df e vendidos
 df = df_orig[
     df_orig["mes_label"].isin(meses_sel) &
     df_orig["vendedor"].isin(vendedores_sel)
@@ -59,116 +66,320 @@ if df.empty:
     st.stop()
 
 vendidos = df[df["status"] == "Vendido"]
+perdidos = df[df["status"] == "Perdido"]
+em_neg = df[df["status"] == "Em negociação"]
 
-# ── Título ────────────────────────────────────────────────────────────────────
+# ── Título e abas ─────────────────────────────────────────────────────────────
 st.title("Dashboard de Vendas Automotivas")
-st.divider()
 
-# ── KPIs ──────────────────────────────────────────────────────────────────────
-total_vendas = len(vendidos)
-receita_total = vendidos["valor"].sum()
-ticket_medio = vendidos["valor"].mean() if total_vendas > 0 else 0
-
-col1, col2, col3 = st.columns(3)
-col1.metric("Total de Vendas", f"{total_vendas}")
-col2.metric("Receita Total", f"R$ {receita_total:,.0f}".replace(",", "."))
-col3.metric("Ticket Médio", f"R$ {ticket_medio:,.0f}".replace(",", "."))
-
-st.divider()
-
-# ── Evolução Mensal ────────────────────────────────────────────────────────────
-st.subheader("Evolução Mensal de Vendas")
-
-evolucao = (
-    vendidos.groupby(["mes_sort", "mes_label"])
-    .agg(vendas=("valor", "count"), receita=("valor", "sum"))
-    .reset_index()
-    .sort_values("mes_sort")
+tab_visao, tab_leads, tab_vend, tab_estoque = st.tabs(
+    ["Visão Geral", "Leads e Funil", "Vendedores", "Estoque"]
 )
 
-fig_evol = px.bar(
-    evolucao,
-    x="mes_label",
-    y="vendas",
-    text="vendas",
-    color_discrete_sequence=["#2563EB"],
-    labels={"mes_label": "Mês", "vendas": "Vendas"},
-)
-fig_evol.update_traces(textposition="outside")
-fig_evol.update_layout(
-    xaxis=dict(categoryorder="array", categoryarray=evolucao["mes_label"].tolist()),
-    xaxis_title=None,
-    yaxis_title="Vendas",
-    margin=dict(l=0, r=20, t=10, b=0),
-)
-st.plotly_chart(fig_evol, use_container_width=True)
+# ══════════════════════════════════════════════════════════════════════════════
+# ABA 1 — VISÃO GERAL
+# ══════════════════════════════════════════════════════════════════════════════
+with tab_visao:
+    total_vendas = len(vendidos)
+    receita_total = vendidos["valor"].sum()
+    ticket_medio = vendidos["valor"].mean() if total_vendas > 0 else 0
+    taxa_conversao = total_vendas / len(df) * 100
 
-st.divider()
+    col1, col2, col3, col4 = st.columns(4)
+    col1.metric("Total de Vendas", f"{total_vendas}")
+    col2.metric("Receita Total", f"R$ {receita_total:,.0f}".replace(",", "."))
+    col3.metric("Ticket Médio", f"R$ {ticket_medio:,.0f}".replace(",", "."))
+    col4.metric("Taxa de Conversão", f"{taxa_conversao:.1f}%")
 
-# ── Gráficos ──────────────────────────────────────────────────────────────────
-col_a, col_b = st.columns(2)
+    st.divider()
+    st.subheader("Evolução Mensal de Vendas")
 
-with col_a:
-    st.subheader("Ranking de Vendedores")
-    ranking = (
-        vendidos.groupby("vendedor")
+    evolucao = (
+        vendidos.groupby(["mes_sort", "mes_label"])
         .size()
-        .sort_values(ascending=True)
         .reset_index(name="vendas")
+        .sort_values("mes_sort")
     )
-    fig_vend = px.bar(
-        ranking,
-        x="vendas",
-        y="vendedor",
-        orientation="h",
+    fig_evol = px.bar(
+        evolucao,
+        x="mes_label",
+        y="vendas",
         text="vendas",
-        color="vendas",
-        color_continuous_scale="Blues",
+        color_discrete_sequence=["#2563EB"],
+        labels={"mes_label": "Mês", "vendas": "Vendas"},
     )
-    fig_vend.update_traces(textposition="outside")
-    fig_vend.update_layout(
-        showlegend=False,
-        coloraxis_showscale=False,
-        xaxis_title="Quantidade de Vendas",
-        yaxis_title=None,
+    fig_evol.update_traces(textposition="outside")
+    fig_evol.update_layout(
+        xaxis=dict(categoryorder="array", categoryarray=evolucao["mes_label"].tolist()),
+        xaxis_title=None,
+        yaxis_title="Vendas",
         margin=dict(l=0, r=20, t=10, b=0),
     )
-    st.plotly_chart(fig_vend, use_container_width=True)
+    st.plotly_chart(fig_evol, use_container_width=True)
 
-with col_b:
-    st.subheader("Modelos Mais Vendidos")
-    modelos_df = (
-        vendidos.groupby("modelo")
-        .size()
-        .sort_values(ascending=True)
-        .reset_index(name="vendas")
+# ══════════════════════════════════════════════════════════════════════════════
+# ABA 2 — LEADS E FUNIL
+# ══════════════════════════════════════════════════════════════════════════════
+with tab_leads:
+    origem_counts = df["origem_lead"].value_counts()
+    top_canal = origem_counts.idxmax()
+    top_canal_pct = origem_counts.max() / len(df) * 100
+
+    col1, col2, col3 = st.columns(3)
+    col1.metric("Total de Leads", f"{len(df)}")
+    col2.metric("Principal Canal", top_canal)
+    col3.metric("Participação do Canal", f"{top_canal_pct:.1f}%")
+
+    st.divider()
+    col_a, col_b = st.columns(2)
+
+    with col_a:
+        st.subheader("Leads por Origem")
+        leads_origem = (
+            df.groupby("origem_lead")
+            .size()
+            .reset_index(name="total")
+            .sort_values("total", ascending=False)
+        )
+        fig_pizza = px.pie(
+            leads_origem,
+            names="origem_lead",
+            values="total",
+            color_discrete_sequence=px.colors.qualitative.Set2,
+            hole=0.4,
+        )
+        fig_pizza.update_traces(textposition="inside", textinfo="percent+label")
+        fig_pizza.update_layout(
+            showlegend=False,
+            margin=dict(l=0, r=0, t=10, b=0),
+        )
+        st.plotly_chart(fig_pizza, use_container_width=True)
+
+    with col_b:
+        st.subheader("Funil de Status")
+        funil = pd.DataFrame({
+            "status": ["Vendido", "Em negociação", "Perdido"],
+            "total": [len(vendidos), len(em_neg), len(perdidos)],
+        })
+        fig_funil = px.bar(
+            funil,
+            x="status",
+            y="total",
+            text="total",
+            color="status",
+            color_discrete_map=COR_STATUS,
+            labels={"status": "", "total": "Quantidade"},
+        )
+        fig_funil.update_traces(textposition="outside")
+        fig_funil.update_layout(
+            showlegend=False,
+            xaxis_title=None,
+            yaxis_title="Quantidade",
+            margin=dict(l=0, r=20, t=10, b=0),
+        )
+        st.plotly_chart(fig_funil, use_container_width=True)
+
+    st.divider()
+    st.subheader("Taxa de Conversão por Origem")
+
+    leads_orig = df.groupby("origem_lead").size().reset_index(name="leads")
+    vendidos_orig = vendidos.groupby("origem_lead").size().reset_index(name="vendidos")
+    conv_orig = leads_orig.merge(vendidos_orig, on="origem_lead", how="left")
+    conv_orig["vendidos"] = conv_orig["vendidos"].fillna(0).astype(int)
+    conv_orig["conversao"] = conv_orig["vendidos"] / conv_orig["leads"] * 100
+    conv_orig = conv_orig.sort_values("conversao", ascending=True)
+
+    fig_conv = px.bar(
+        conv_orig,
+        x="conversao",
+        y="origem_lead",
+        orientation="h",
+        text=conv_orig["conversao"].map("{:.1f}%".format),
+        color="conversao",
+        color_continuous_scale="Greens",
+        labels={"conversao": "Taxa (%)", "origem_lead": ""},
     )
-    fig_mod = px.bar(
-        modelos_df,
-        x="vendas",
+    fig_conv.update_traces(textposition="outside")
+    fig_conv.update_layout(
+        showlegend=False,
+        coloraxis_showscale=False,
+        xaxis_title="Taxa de Conversão (%)",
+        yaxis_title=None,
+        margin=dict(l=0, r=60, t=10, b=0),
+    )
+    st.plotly_chart(fig_conv, use_container_width=True)
+
+# ══════════════════════════════════════════════════════════════════════════════
+# ABA 3 — VENDEDORES
+# ══════════════════════════════════════════════════════════════════════════════
+with tab_vend:
+    col_a, col_b = st.columns(2)
+
+    with col_a:
+        st.subheader("Ranking por Vendas")
+        ranking = (
+            vendidos.groupby("vendedor")
+            .size()
+            .sort_values(ascending=True)
+            .reset_index(name="vendas")
+        )
+        fig_rank = px.bar(
+            ranking,
+            x="vendas",
+            y="vendedor",
+            orientation="h",
+            text="vendas",
+            color="vendas",
+            color_continuous_scale="Blues",
+        )
+        fig_rank.update_traces(textposition="outside")
+        fig_rank.update_layout(
+            showlegend=False,
+            coloraxis_showscale=False,
+            xaxis_title="Vendas",
+            yaxis_title=None,
+            margin=dict(l=0, r=20, t=10, b=0),
+        )
+        st.plotly_chart(fig_rank, use_container_width=True)
+
+    with col_b:
+        st.subheader("Receita por Vendedor")
+        receita_vend = (
+            vendidos.groupby("vendedor")["valor"]
+            .sum()
+            .sort_values(ascending=True)
+            .reset_index(name="receita")
+        )
+        fig_rec = px.bar(
+            receita_vend,
+            x="receita",
+            y="vendedor",
+            orientation="h",
+            text=receita_vend["receita"].map(lambda v: f"R$ {v / 1e6:.2f}M"),
+            color="receita",
+            color_continuous_scale="Purples",
+        )
+        fig_rec.update_traces(textposition="outside")
+        fig_rec.update_layout(
+            showlegend=False,
+            coloraxis_showscale=False,
+            xaxis_title="Receita (R$)",
+            yaxis_title=None,
+            margin=dict(l=0, r=90, t=10, b=0),
+        )
+        st.plotly_chart(fig_rec, use_container_width=True)
+
+    st.divider()
+    st.subheader("Desempenho por Vendedor")
+
+    leads_vend = df.groupby("vendedor").size().reset_index(name="leads")
+    stats_vend = vendidos.groupby("vendedor").agg(
+        vendas=("valor", "count"),
+        receita=("valor", "sum"),
+        ticket_medio=("valor", "mean"),
+    ).reset_index()
+    desempenho = leads_vend.merge(stats_vend, on="vendedor", how="left")
+    desempenho["vendas"] = desempenho["vendas"].fillna(0).astype(int)
+    desempenho["receita"] = desempenho["receita"].fillna(0)
+    desempenho["conversao"] = desempenho["vendas"] / desempenho["leads"] * 100
+
+    tabela = desempenho[["vendedor", "leads", "vendas", "conversao", "receita", "ticket_medio"]].copy()
+    tabela["conversao"] = tabela["conversao"].map("{:.1f}%".format)
+    tabela["receita"] = tabela["receita"].map(lambda v: f"R$ {v:,.0f}".replace(",", "."))
+    tabela["ticket_medio"] = tabela["ticket_medio"].map(
+        lambda v: f"R$ {v:,.0f}".replace(",", ".") if pd.notna(v) else "-"
+    )
+    tabela = tabela.rename(columns={
+        "vendedor": "Vendedor", "leads": "Leads", "vendas": "Vendas",
+        "conversao": "Conversão", "receita": "Receita", "ticket_medio": "Ticket Médio",
+    }).sort_values("Vendas", ascending=False)
+
+    st.dataframe(tabela, use_container_width=True, hide_index=True)
+
+# ══════════════════════════════════════════════════════════════════════════════
+# ABA 4 — ESTOQUE
+# ══════════════════════════════════════════════════════════════════════════════
+with tab_estoque:
+    col_a, col_b = st.columns(2)
+
+    with col_a:
+        st.subheader("Modelos Mais Vendidos")
+        modelos_rank = (
+            vendidos.groupby("modelo")
+            .size()
+            .sort_values(ascending=True)
+            .reset_index(name="vendas")
+        )
+        fig_mod = px.bar(
+            modelos_rank,
+            x="vendas",
+            y="modelo",
+            orientation="h",
+            text="vendas",
+            color="vendas",
+            color_continuous_scale="Teal",
+        )
+        fig_mod.update_traces(textposition="outside")
+        fig_mod.update_layout(
+            showlegend=False,
+            coloraxis_showscale=False,
+            xaxis_title="Vendas",
+            yaxis_title=None,
+            margin=dict(l=0, r=20, t=10, b=0),
+        )
+        st.plotly_chart(fig_mod, use_container_width=True)
+
+    with col_b:
+        st.subheader("Ticket Médio por Modelo")
+        ticket_modelo = (
+            vendidos.groupby("modelo")["valor"]
+            .mean()
+            .sort_values(ascending=True)
+            .reset_index(name="ticket")
+        )
+        fig_ticket = px.bar(
+            ticket_modelo,
+            x="ticket",
+            y="modelo",
+            orientation="h",
+            text=ticket_modelo["ticket"].map(lambda v: f"R$ {v / 1000:.0f}k"),
+            color="ticket",
+            color_continuous_scale="Oranges",
+        )
+        fig_ticket.update_traces(textposition="outside")
+        fig_ticket.update_layout(
+            showlegend=False,
+            coloraxis_showscale=False,
+            xaxis_title="Ticket Médio (R$)",
+            yaxis_title=None,
+            margin=dict(l=0, r=70, t=10, b=0),
+        )
+        st.plotly_chart(fig_ticket, use_container_width=True)
+
+    st.divider()
+    st.subheader("Status por Modelo")
+
+    status_modelo = (
+        df.groupby(["modelo", "status"])
+        .size()
+        .reset_index(name="total")
+    )
+    fig_status_mod = px.bar(
+        status_modelo,
+        x="total",
         y="modelo",
+        color="status",
         orientation="h",
-        text="vendas",
-        color="vendas",
-        color_continuous_scale="Teal",
+        text="total",
+        color_discrete_map=COR_STATUS,
+        barmode="stack",
+        labels={"total": "Quantidade", "modelo": "", "status": "Status"},
     )
-    fig_mod.update_traces(textposition="outside")
-    fig_mod.update_layout(
-        showlegend=False,
-        coloraxis_showscale=False,
-        xaxis_title="Quantidade de Vendas",
+    fig_status_mod.update_traces(textposition="inside", textfont_size=11)
+    fig_status_mod.update_layout(
+        xaxis_title="Quantidade",
         yaxis_title=None,
+        legend_title=None,
         margin=dict(l=0, r=20, t=10, b=0),
     )
-    st.plotly_chart(fig_mod, use_container_width=True)
-
-st.divider()
-
-# ── Tabela de dados ────────────────────────────────────────────────────────────
-with st.expander("Ver dados completos"):
-    cols_exibir = [c for c in df.columns if c not in ("mes_num", "ano", "mes_label", "mes_sort")]
-    st.dataframe(
-        df[cols_exibir].sort_values("data", ascending=False),
-        use_container_width=True,
-        hide_index=True,
-    )
+    st.plotly_chart(fig_status_mod, use_container_width=True)
