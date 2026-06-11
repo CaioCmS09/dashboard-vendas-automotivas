@@ -1,51 +1,201 @@
 data,vendedor,modelo,valor,origem_lead,status
-2026-01-03,Marcos Oliveira,Onix,72500,Instagram,Vendido
-2026-01-05,Fernanda Lima,HB20,68900,Site,Perdido
-2026-01-07,Rafael Souza,Strada,112000,Indicação,Vendido
-2026-01-08,Juliana Costa,Compass,189900,Instagram,Em negociação
-2026-01-10,Marcos Oliveira,Argo,79800,Walk-in,Vendido
-2026-01-12,Thiago Mendes,Cronos,94500,Site,Perdido
-2026-01-14,Fernanda Lima,T-Cross,174900,Indicação,Vendido
-2026-01-15,Ana Paula Ferreira,Onix,74200,Instagram,Em negociação
-2026-01-17,Rafael Souza,HB20,71300,Walk-in,Vendido
-2026-01-20,Juliana Costa,Pulse,139900,Site,Vendido
-2026-01-22,Thiago Mendes,Strada,115000,Indicação,Perdido
-2026-01-24,Ana Paula Ferreira,Compass,192000,Instagram,Vendido
-2026-01-27,Marcos Oliveira,Kicks,184500,Walk-in,Em negociação
-2026-01-29,Fernanda Lima,Onix,73100,Site,Vendido
-2026-02-02,Rafael Souza,Argo,81200,Indicação,Vendido
-2026-02-04,Juliana Costa,HB20,69800,Instagram,Perdido
-2026-02-06,Thiago Mendes,Cronos,96000,Walk-in,Vendido
-2026-02-08,Ana Paula Ferreira,T-Cross,177500,Site,Em negociação
-2026-02-10,Marcos Oliveira,Strada,118000,Indicação,Vendido
-2026-02-12,Fernanda Lima,Compass,195000,Instagram,Perdido
-2026-02-14,Rafael Souza,Pulse,141000,Walk-in,Vendido
-2026-02-17,Juliana Costa,Onix,75500,Site,Vendido
-2026-02-19,Thiago Mendes,Kicks,187000,Indicação,Em negociação
-2026-02-21,Ana Paula Ferreira,HB20,70400,Instagram,Vendido
-2026-02-24,Marcos Oliveira,Argo,82700,Walk-in,Perdido
-2026-02-26,Fernanda Lima,Strada,113500,Site,Vendido
-2026-03-01,Rafael Souza,Compass,191000,Indicação,Vendido
-2026-03-03,Juliana Costa,T-Cross,176000,Instagram,Perdido
-2026-03-05,Thiago Mendes,Onix,76200,Walk-in,Vendido
-2026-03-07,Ana Paula Ferreira,Cronos,97500,Site,Em negociação
-2026-03-10,Marcos Oliveira,Pulse,143000,Indicação,Vendido
-2026-03-12,Fernanda Lima,HB20,72000,Instagram,Vendido
-2026-03-14,Rafael Souza,Kicks,188500,Walk-in,Perdido
-2026-03-17,Juliana Costa,Argo,84100,Site,Vendido
-2026-03-19,Thiago Mendes,Strada,116500,Indicação,Em negociação
-2026-03-21,Ana Paula Ferreira,Compass,194000,Instagram,Vendido
-2026-03-24,Marcos Oliveira,Onix,77000,Walk-in,Vendido
-2026-03-26,Fernanda Lima,T-Cross,179000,Site,Perdido
-2026-03-28,Rafael Souza,HB20,71800,Indicação,Vendido
-2026-04-01,Juliana Costa,Pulse,145000,Instagram,Vendido
-2026-04-03,Thiago Mendes,Argo,85500,Walk-in,Em negociação
-2026-04-05,Ana Paula Ferreira,Strada,119000,Site,Vendido
-2026-04-07,Marcos Oliveira,Compass,197000,Indicação,Perdido
-2026-04-09,Fernanda Lima,Cronos,98800,Instagram,Vendido
-2026-04-12,Rafael Souza,Kicks,190000,Walk-in,Vendido
-2026-04-14,Juliana Costa,Onix,78300,Site,Em negociação
-2026-04-16,Thiago Mendes,HB20,73500,Indicação,Vendido
-2026-04-18,Ana Paula Ferreira,T-Cross,181000,Instagram,Perdido
-2026-04-21,Marcos Oliveira,Pulse,147000,Walk-in,Vendido
-2026-04-23,Fernanda Lima,Strada,121000,Site,Em negociação
+2026-01-01,Thiago Mendes,Argo,79700,Indicação,Vendido
+2026-01-02,Ana Paula Ferreira,Kicks,192200,Instagram,Em negociação
+2026-01-02,Rafael Souza,Onix,76600,Indicação,Vendido
+2026-01-03,Bruno Carvalho,HB20,77700,Indicação,Em negociação
+2026-01-04,Fernanda Lima,Cronos,99100,Walk-in,Perdido
+2026-01-06,Marcos Oliveira,Compass,193000,Walk-in,Perdido
+2026-01-07,Juliana Costa,HB20,88300,Indicação,Vendido
+2026-01-08,Ana Paula Ferreira,T-Cross,169700,Indicação,Vendido
+2026-01-08,Thiago Mendes,Onix,77600,Walk-in,Vendido
+2026-01-08,Thiago Mendes,Cronos,98300,Site,Vendido
+2026-01-08,Bruno Carvalho,Compass,201500,Site,Perdido
+2026-01-08,Marcos Oliveira,Argo,88300,Indicação,Em negociação
+2026-01-10,Bruno Carvalho,Argo,83300,Indicação,Perdido
+2026-01-10,Patricia Rocha,Pulse,146300,Site,Vendido
+2026-01-10,Rafael Souza,Kicks,194100,Instagram,Perdido
+2026-01-11,Ana Paula Ferreira,Argo,91100,Instagram,Em negociação
+2026-01-11,Juliana Costa,Compass,195800,Site,Vendido
+2026-01-11,Marcos Oliveira,Strada,110600,Site,Perdido
+2026-01-11,Fernanda Lima,Pulse,150600,Walk-in,Vendido
+2026-01-12,Juliana Costa,T-Cross,184100,Walk-in,Vendido
+2026-01-12,Juliana Costa,Pulse,145200,Site,Perdido
+2026-01-13,Bruno Carvalho,HB20,77700,Site,Vendido
+2026-01-13,Patricia Rocha,Strada,127800,Instagram,Vendido
+2026-01-13,Fernanda Lima,Kicks,188300,Walk-in,Perdido
+2026-01-13,Ana Paula Ferreira,Strada,121800,Walk-in,Em negociação
+2026-01-14,Patricia Rocha,Kicks,192900,Site,Em negociação
+2026-01-15,Thiago Mendes,Pulse,146500,Site,Vendido
+2026-01-17,Patricia Rocha,Argo,91300,Site,Perdido
+2026-01-18,Fernanda Lima,Argo,89200,Indicação,Vendido
+2026-01-18,Ana Paula Ferreira,Compass,193900,Indicação,Em negociação
+2026-01-19,Rafael Souza,Kicks,184000,Site,Vendido
+2026-01-19,Rafael Souza,Compass,199600,Site,Perdido
+2026-01-20,Bruno Carvalho,Onix,80600,Indicação,Vendido
+2026-01-21,Bruno Carvalho,Kicks,193900,Instagram,Vendido
+2026-01-24,Bruno Carvalho,Compass,201500,Instagram,Perdido
+2026-01-24,Marcos Oliveira,T-Cross,180200,Indicação,Vendido
+2026-01-24,Bruno Carvalho,Argo,87900,Site,Vendido
+2026-01-26,Thiago Mendes,Pulse,140600,Walk-in,Em negociação
+2026-01-27,Bruno Carvalho,Pulse,135700,Indicação,Vendido
+2026-01-29,Patricia Rocha,T-Cross,172200,Site,Em negociação
+2026-01-29,Bruno Carvalho,Kicks,182600,Instagram,Em negociação
+2026-01-30,Rafael Souza,Onix,80900,Walk-in,Vendido
+2026-01-30,Thiago Mendes,Strada,111200,Walk-in,Vendido
+2026-01-30,Patricia Rocha,Cronos,93400,Indicação,Perdido
+2026-02-02,Thiago Mendes,Cronos,97700,Walk-in,Em negociação
+2026-02-02,Patricia Rocha,Argo,80000,Instagram,Vendido
+2026-02-03,Ana Paula Ferreira,Kicks,183300,Site,Perdido
+2026-02-04,Marcos Oliveira,Onix,71000,Site,Vendido
+2026-02-04,Rafael Souza,Compass,181000,Site,Vendido
+2026-02-06,Fernanda Lima,Strada,122100,Site,Perdido
+2026-02-08,Thiago Mendes,Pulse,152900,Indicação,Vendido
+2026-02-09,Fernanda Lima,Strada,125500,Site,Vendido
+2026-02-10,Marcos Oliveira,Argo,80700,Indicação,Vendido
+2026-02-12,Juliana Costa,T-Cross,178100,Instagram,Perdido
+2026-02-12,Thiago Mendes,Compass,185200,Instagram,Vendido
+2026-02-13,Bruno Carvalho,HB20,83800,Indicação,Vendido
+2026-02-14,Ana Paula Ferreira,Onix,82900,Instagram,Em negociação
+2026-02-14,Fernanda Lima,T-Cross,180500,Walk-in,Em negociação
+2026-02-14,Patricia Rocha,Cronos,104200,Site,Vendido
+2026-02-15,Thiago Mendes,T-Cross,172500,Walk-in,Vendido
+2026-02-17,Thiago Mendes,Pulse,146100,Indicação,Vendido
+2026-02-17,Thiago Mendes,Compass,184400,Walk-in,Vendido
+2026-02-18,Bruno Carvalho,Compass,203700,Indicação,Perdido
+2026-02-20,Ana Paula Ferreira,HB20,87600,Site,Em negociação
+2026-02-20,Ana Paula Ferreira,Pulse,140400,Indicação,Perdido
+2026-02-21,Thiago Mendes,Cronos,95100,Instagram,Vendido
+2026-02-21,Fernanda Lima,Kicks,186800,Site,Perdido
+2026-02-24,Juliana Costa,T-Cross,180500,Walk-in,Vendido
+2026-02-26,Marcos Oliveira,Pulse,146400,Instagram,Vendido
+2026-02-26,Bruno Carvalho,Argo,83600,Site,Em negociação
+2026-02-27,Ana Paula Ferreira,Argo,94900,Walk-in,Perdido
+2026-03-01,Ana Paula Ferreira,Kicks,195500,Walk-in,Em negociação
+2026-03-02,Ana Paula Ferreira,Kicks,190400,Walk-in,Vendido
+2026-03-04,Thiago Mendes,Argo,85800,Site,Vendido
+2026-03-05,Ana Paula Ferreira,Onix,74900,Instagram,Em negociação
+2026-03-05,Rafael Souza,Kicks,201500,Site,Vendido
+2026-03-06,Thiago Mendes,Compass,204700,Indicação,Vendido
+2026-03-06,Thiago Mendes,Onix,74900,Site,Vendido
+2026-03-06,Thiago Mendes,Cronos,92500,Instagram,Vendido
+2026-03-08,Thiago Mendes,Kicks,185200,Instagram,Em negociação
+2026-03-08,Thiago Mendes,HB20,89100,Site,Vendido
+2026-03-09,Marcos Oliveira,Pulse,137600,Indicação,Perdido
+2026-03-11,Patricia Rocha,Pulse,147200,Indicação,Vendido
+2026-03-12,Thiago Mendes,Strada,111300,Walk-in,Perdido
+2026-03-14,Bruno Carvalho,Onix,71600,Walk-in,Perdido
+2026-03-14,Marcos Oliveira,Onix,84700,Site,Vendido
+2026-03-15,Thiago Mendes,Strada,124400,Instagram,Vendido
+2026-03-15,Bruno Carvalho,Compass,186000,Site,Perdido
+2026-03-15,Patricia Rocha,Kicks,191700,Walk-in,Perdido
+2026-03-16,Bruno Carvalho,Argo,93000,Indicação,Em negociação
+2026-03-16,Juliana Costa,HB20,77500,Site,Vendido
+2026-03-16,Fernanda Lima,Argo,94900,Site,Vendido
+2026-03-19,Fernanda Lima,Compass,188800,Site,Perdido
+2026-03-21,Patricia Rocha,HB20,85400,Walk-in,Vendido
+2026-03-21,Juliana Costa,Argo,78800,Indicação,Perdido
+2026-03-23,Fernanda Lima,Argo,89600,Site,Vendido
+2026-03-24,Juliana Costa,Argo,94000,Walk-in,Vendido
+2026-03-25,Juliana Costa,Onix,83900,Site,Em negociação
+2026-03-27,Fernanda Lima,Argo,81600,Instagram,Perdido
+2026-03-27,Thiago Mendes,Strada,117800,Walk-in,Vendido
+2026-03-28,Thiago Mendes,Onix,81900,Walk-in,Em negociação
+2026-03-29,Patricia Rocha,Argo,90800,Walk-in,Vendido
+2026-03-29,Bruno Carvalho,Onix,71000,Indicação,Vendido
+2026-03-30,Fernanda Lima,Argo,78600,Site,Em negociação
+2026-04-02,Marcos Oliveira,HB20,81800,Site,Vendido
+2026-04-02,Patricia Rocha,Pulse,148200,Indicação,Vendido
+2026-04-02,Bruno Carvalho,Strada,124900,Walk-in,Perdido
+2026-04-04,Ana Paula Ferreira,Onix,82000,Walk-in,Perdido
+2026-04-06,Fernanda Lima,Cronos,96200,Site,Em negociação
+2026-04-07,Patricia Rocha,Cronos,98500,Indicação,Perdido
+2026-04-08,Marcos Oliveira,T-Cross,182000,Walk-in,Em negociação
+2026-04-08,Thiago Mendes,Onix,78000,Indicação,Perdido
+2026-04-08,Marcos Oliveira,Onix,80300,Walk-in,Vendido
+2026-04-08,Juliana Costa,T-Cross,169300,Indicação,Vendido
+2026-04-09,Patricia Rocha,Pulse,151000,Instagram,Em negociação
+2026-04-11,Rafael Souza,Compass,193600,Indicação,Perdido
+2026-04-11,Patricia Rocha,Pulse,152800,Instagram,Perdido
+2026-04-11,Rafael Souza,HB20,81100,Indicação,Perdido
+2026-04-12,Bruno Carvalho,Kicks,182300,Instagram,Perdido
+2026-04-12,Patricia Rocha,Compass,185800,Instagram,Vendido
+2026-04-12,Thiago Mendes,Strada,122700,Indicação,Vendido
+2026-04-13,Patricia Rocha,T-Cross,180300,Site,Vendido
+2026-04-14,Rafael Souza,Pulse,149100,Walk-in,Vendido
+2026-04-15,Rafael Souza,Compass,206000,Instagram,Vendido
+2026-04-15,Ana Paula Ferreira,Argo,88600,Indicação,Em negociação
+2026-04-17,Thiago Mendes,HB20,82200,Walk-in,Perdido
+2026-04-23,Patricia Rocha,Strada,121400,Indicação,Vendido
+2026-04-25,Bruno Carvalho,Cronos,102100,Walk-in,Vendido
+2026-04-27,Juliana Costa,Cronos,92800,Walk-in,Vendido
+2026-04-27,Marcos Oliveira,Compass,201000,Indicação,Vendido
+2026-04-29,Bruno Carvalho,Pulse,153000,Walk-in,Vendido
+2026-04-29,Marcos Oliveira,Strada,122600,Site,Vendido
+2026-04-29,Ana Paula Ferreira,Kicks,197100,Instagram,Vendido
+2026-04-30,Patricia Rocha,Pulse,137500,Instagram,Perdido
+2026-04-30,Rafael Souza,Strada,120400,Instagram,Em negociação
+2026-04-30,Thiago Mendes,Pulse,155000,Indicação,Perdido
+2026-05-01,Fernanda Lima,T-Cross,184600,Indicação,Vendido
+2026-05-01,Ana Paula Ferreira,Kicks,191700,Walk-in,Em negociação
+2026-05-02,Fernanda Lima,Kicks,182900,Site,Perdido
+2026-05-02,Fernanda Lima,Argo,83800,Walk-in,Vendido
+2026-05-02,Patricia Rocha,Onix,72500,Site,Vendido
+2026-05-04,Marcos Oliveira,Argo,78700,Indicação,Perdido
+2026-05-05,Ana Paula Ferreira,HB20,82500,Indicação,Vendido
+2026-05-05,Juliana Costa,T-Cross,171700,Walk-in,Vendido
+2026-05-06,Rafael Souza,Strada,114300,Instagram,Vendido
+2026-05-07,Juliana Costa,T-Cross,183800,Walk-in,Vendido
+2026-05-07,Patricia Rocha,Strada,115900,Indicação,Perdido
+2026-05-08,Marcos Oliveira,Pulse,141500,Walk-in,Vendido
+2026-05-09,Rafael Souza,Argo,91900,Instagram,Vendido
+2026-05-10,Thiago Mendes,Pulse,143800,Walk-in,Vendido
+2026-05-11,Thiago Mendes,Argo,89600,Site,Perdido
+2026-05-12,Fernanda Lima,T-Cross,180300,Site,Perdido
+2026-05-13,Ana Paula Ferreira,T-Cross,182600,Indicação,Vendido
+2026-05-14,Bruno Carvalho,Argo,78500,Indicação,Vendido
+2026-05-14,Marcos Oliveira,HB20,89400,Walk-in,Vendido
+2026-05-15,Ana Paula Ferreira,Argo,83800,Site,Vendido
+2026-05-16,Rafael Souza,Compass,192800,Instagram,Vendido
+2026-05-17,Patricia Rocha,HB20,82900,Instagram,Vendido
+2026-05-17,Fernanda Lima,Cronos,91300,Indicação,Em negociação
+2026-05-22,Rafael Souza,Cronos,98600,Site,Em negociação
+2026-05-22,Ana Paula Ferreira,Strada,123800,Indicação,Vendido
+2026-05-23,Patricia Rocha,Strada,116500,Indicação,Em negociação
+2026-05-25,Patricia Rocha,Cronos,90900,Instagram,Vendido
+2026-05-25,Juliana Costa,Strada,129300,Walk-in,Em negociação
+2026-05-27,Fernanda Lima,Kicks,191300,Walk-in,Vendido
+2026-05-27,Fernanda Lima,HB20,81700,Walk-in,Em negociação
+2026-05-29,Bruno Carvalho,Cronos,94700,Indicação,Vendido
+2026-05-31,Patricia Rocha,Onix,75900,Instagram,Vendido
+2026-06-04,Juliana Costa,Kicks,190300,Instagram,Vendido
+2026-06-04,Thiago Mendes,Pulse,152900,Walk-in,Perdido
+2026-06-04,Marcos Oliveira,Onix,73500,Instagram,Perdido
+2026-06-05,Fernanda Lima,Argo,90600,Instagram,Vendido
+2026-06-06,Rafael Souza,Compass,207500,Walk-in,Vendido
+2026-06-06,Bruno Carvalho,Pulse,144400,Site,Em negociação
+2026-06-07,Fernanda Lima,T-Cross,184700,Walk-in,Em negociação
+2026-06-08,Marcos Oliveira,T-Cross,175100,Indicação,Vendido
+2026-06-08,Patricia Rocha,Compass,202700,Site,Perdido
+2026-06-08,Ana Paula Ferreira,Cronos,90500,Indicação,Em negociação
+2026-06-09,Thiago Mendes,HB20,85100,Site,Perdido
+2026-06-11,Fernanda Lima,Onix,81600,Site,Perdido
+2026-06-12,Ana Paula Ferreira,HB20,76200,Site,Vendido
+2026-06-13,Juliana Costa,Strada,124400,Instagram,Vendido
+2026-06-14,Juliana Costa,Kicks,187300,Site,Vendido
+2026-06-16,Marcos Oliveira,Cronos,91700,Indicação,Vendido
+2026-06-16,Thiago Mendes,Strada,113300,Site,Vendido
+2026-06-17,Rafael Souza,Onix,70600,Instagram,Vendido
+2026-06-17,Ana Paula Ferreira,Cronos,94000,Instagram,Perdido
+2026-06-17,Marcos Oliveira,Strada,116700,Site,Vendido
+2026-06-18,Fernanda Lima,T-Cross,181400,Instagram,Perdido
+2026-06-18,Ana Paula Ferreira,Pulse,146400,Instagram,Em negociação
+2026-06-18,Juliana Costa,Pulse,147800,Instagram,Vendido
+2026-06-18,Patricia Rocha,Kicks,189700,Instagram,Em negociação
+2026-06-19,Bruno Carvalho,HB20,87200,Walk-in,Vendido
+2026-06-20,Patricia Rocha,Onix,82500,Instagram,Vendido
+2026-06-21,Rafael Souza,Onix,78200,Instagram,Vendido
+2026-06-24,Ana Paula Ferreira,Strada,117000,Walk-in,Vendido
+2026-06-25,Patricia Rocha,Kicks,189500,Walk-in,Em negociação
+2026-06-26,Juliana Costa,Onix,72900,Walk-in,Vendido
+2026-06-27,Bruno Carvalho,Pulse,140800,Indicação,Vendido
+2026-06-28,Bruno Carvalho,Pulse,145200,Instagram,Em negociação
