@@ -1,6 +1,7 @@
 import pandas as pd
 import streamlit as st
 import plotly.express as px
+import plotly.graph_objects as go
 
 st.set_page_config(page_title="Dashboard de Vendas Automotivas", layout="wide")
 
@@ -123,59 +124,68 @@ with tab_visao:
 with tab_leads:
     origem_counts = df["origem_lead"].value_counts()
     top_canal = origem_counts.idxmax()
-    top_canal_pct = origem_counts.max() / len(df) * 100
+    taxa_conv_geral = len(vendidos) / len(df) * 100
 
     col1, col2, col3 = st.columns(3)
     col1.metric("Total de Leads", f"{len(df)}")
-    col2.metric("Principal Canal", top_canal)
-    col3.metric("Participação do Canal", f"{top_canal_pct:.1f}%")
+    col2.metric("Melhor Canal", top_canal, f"{origem_counts.max()} leads")
+    col3.metric("Taxa de Conversão Geral", f"{taxa_conv_geral:.1f}%")
 
     st.divider()
     col_a, col_b = st.columns(2)
 
     with col_a:
-        st.subheader("Leads por Origem")
+        st.subheader("Distribuição por Origem")
         leads_origem = (
             df.groupby("origem_lead")
             .size()
             .reset_index(name="total")
             .sort_values("total", ascending=False)
         )
+        CORES_ORIGEM = ["#3B82F6", "#10B981", "#F59E0B", "#8B5CF6"]
         fig_pizza = px.pie(
             leads_origem,
             names="origem_lead",
             values="total",
-            color_discrete_sequence=px.colors.qualitative.Set2,
-            hole=0.4,
+            color_discrete_sequence=CORES_ORIGEM,
+            hole=0.45,
         )
-        fig_pizza.update_traces(textposition="inside", textinfo="percent+label")
+        fig_pizza.update_traces(
+            textposition="outside",
+            textinfo="percent+label",
+            textfont_size=13,
+            pull=[0.04] * len(leads_origem),
+        )
         fig_pizza.update_layout(
-            showlegend=False,
-            margin=dict(l=0, r=0, t=10, b=0),
+            showlegend=True,
+            legend=dict(orientation="h", yanchor="bottom", y=-0.2, xanchor="center", x=0.5),
+            margin=dict(l=0, r=0, t=10, b=40),
         )
         st.plotly_chart(fig_pizza, use_container_width=True)
 
     with col_b:
-        st.subheader("Funil de Status")
-        funil = pd.DataFrame({
-            "status": ["Vendido", "Em negociação", "Perdido"],
-            "total": [len(vendidos), len(em_neg), len(perdidos)],
-        })
-        fig_funil = px.bar(
-            funil,
-            x="status",
-            y="total",
-            text="total",
-            color="status",
-            color_discrete_map=COR_STATUS,
-            labels={"status": "", "total": "Quantidade"},
-        )
-        fig_funil.update_traces(textposition="outside")
+        st.subheader("Funil de Conversão")
+        etapas = ["Total de Leads", "Em Negociação", "Vendidos"]
+        valores = [len(df), len(em_neg) + len(vendidos), len(vendidos)]
+        pcts = [100.0, (len(em_neg) + len(vendidos)) / len(df) * 100, taxa_conv_geral]
+        labels_funil = [
+            f"{e}<br><b>{v}</b>  ({p:.1f}%)"
+            for e, v, p in zip(etapas, valores, pcts)
+        ]
+        fig_funil = go.Figure(go.Funnel(
+            y=labels_funil,
+            x=valores,
+            marker=dict(color=["#3B82F6", "#F59E0B", "#22C55E"]),
+            textposition="inside",
+            textinfo="none",
+            connector=dict(line=dict(color="rgba(0,0,0,0)", width=0)),
+            opacity=0.9,
+        ))
         fig_funil.update_layout(
+            margin=dict(l=0, r=0, t=10, b=0),
+            funnelmode="stack",
             showlegend=False,
-            xaxis_title=None,
-            yaxis_title="Quantidade",
-            margin=dict(l=0, r=20, t=10, b=0),
+            yaxis=dict(tickfont=dict(size=13)),
         )
         st.plotly_chart(fig_funil, use_container_width=True)
 
@@ -197,15 +207,21 @@ with tab_leads:
         text=conv_orig["conversao"].map("{:.1f}%".format),
         color="conversao",
         color_continuous_scale="Greens",
+        range_color=[0, conv_orig["conversao"].max() * 1.1],
         labels={"conversao": "Taxa (%)", "origem_lead": ""},
+        custom_data=["leads", "vendidos"],
     )
-    fig_conv.update_traces(textposition="outside")
+    fig_conv.update_traces(
+        textposition="outside",
+        hovertemplate="<b>%{y}</b><br>Leads: %{customdata[0]}<br>Vendidos: %{customdata[1]}<br>Conversão: %{x:.1f}%<extra></extra>",
+    )
     fig_conv.update_layout(
         showlegend=False,
         coloraxis_showscale=False,
         xaxis_title="Taxa de Conversão (%)",
         yaxis_title=None,
-        margin=dict(l=0, r=60, t=10, b=0),
+        margin=dict(l=0, r=70, t=10, b=0),
+        xaxis=dict(range=[0, conv_orig["conversao"].max() * 1.25]),
     )
     st.plotly_chart(fig_conv, use_container_width=True)
 
