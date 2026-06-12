@@ -374,70 +374,125 @@ with tab_vend:
 # ABA 4 — ESTOQUE
 # ══════════════════════════════════════════════════════════════════════════════
 with tab_estoque:
+    # Base de estatísticas por modelo
+    modelos_rank = (
+        vendidos.groupby("modelo")
+        .size()
+        .reset_index(name="vendas")
+    )
+    receita_modelo = (
+        vendidos.groupby("modelo")["valor"]
+        .sum()
+        .reset_index(name="receita")
+    )
+    ticket_modelo = (
+        vendidos.groupby("modelo")["valor"]
+        .mean()
+        .reset_index(name="ticket")
+    )
+    stats_modelo = modelos_rank.merge(receita_modelo, on="modelo").merge(ticket_modelo, on="modelo")
+
+    modelo_top_vendas = stats_modelo.loc[stats_modelo["vendas"].idxmax()]
+    modelo_top_receita = stats_modelo.loc[stats_modelo["receita"].idxmax()]
+    ticket_medio_geral = vendidos["valor"].mean()
+
+    # ── KPIs ──────────────────────────────────────────────────────────────────
+    col1, col2, col3 = st.columns(3)
+    col1.metric(
+        "Modelo Mais Vendido",
+        modelo_top_vendas["modelo"],
+        f"{modelo_top_vendas['vendas']} unidades",
+    )
+    col2.metric(
+        "Ticket Médio Geral",
+        f"R$ {ticket_medio_geral:,.0f}".replace(",", "."),
+    )
+    col3.metric(
+        "Maior Receita por Modelo",
+        modelo_top_receita["modelo"],
+        f"R$ {modelo_top_receita['receita']:,.0f}".replace(",", "."),
+    )
+
+    st.divider()
     col_a, col_b = st.columns(2)
 
     with col_a:
         st.subheader("Modelos Mais Vendidos")
-        modelos_rank = (
-            vendidos.groupby("modelo")
-            .size()
-            .sort_values(ascending=True)
-            .reset_index(name="vendas")
-        )
-        fig_mod = px.bar(
-            modelos_rank,
-            x="vendas",
-            y="modelo",
+        rank_mod = stats_modelo.sort_values("vendas", ascending=True)
+        fig_mod = go.Figure(go.Bar(
+            x=rank_mod["vendas"],
+            y=rank_mod["modelo"],
             orientation="h",
-            text="vendas",
-            color="vendas",
-            color_continuous_scale="Teal",
-        )
-        fig_mod.update_traces(textposition="outside")
+            text=rank_mod["vendas"],
+            textposition="outside",
+            marker=dict(
+                color=rank_mod["vendas"],
+                colorscale="Teal",
+                showscale=False,
+            ),
+            hovertemplate="<b>%{y}</b><br>Vendas: %{x}<extra></extra>",
+        ))
         fig_mod.update_layout(
             showlegend=False,
-            coloraxis_showscale=False,
             xaxis_title="Vendas",
             yaxis_title=None,
-            margin=dict(l=0, r=20, t=10, b=0),
+            margin=dict(l=0, r=30, t=10, b=0),
+            xaxis=dict(range=[0, rank_mod["vendas"].max() * 1.25]),
         )
         st.plotly_chart(fig_mod, use_container_width=True)
 
     with col_b:
         st.subheader("Ticket Médio por Modelo")
-        ticket_modelo = (
-            vendidos.groupby("modelo")["valor"]
-            .mean()
-            .sort_values(ascending=True)
-            .reset_index(name="ticket")
-        )
-        fig_ticket = px.bar(
-            ticket_modelo,
-            x="ticket",
-            y="modelo",
+        ticket_ord = stats_modelo.sort_values("ticket", ascending=True)
+        fig_ticket = go.Figure(go.Bar(
+            x=ticket_ord["ticket"],
+            y=ticket_ord["modelo"],
             orientation="h",
-            text=ticket_modelo["ticket"].map(lambda v: f"R$ {v / 1000:.0f}k"),
-            color="ticket",
-            color_continuous_scale="Oranges",
+            text=[f"R$ {v / 1000:.0f}k" for v in ticket_ord["ticket"]],
+            textposition="outside",
+            marker=dict(
+                color=ticket_ord["ticket"],
+                colorscale="Oranges",
+                showscale=False,
+            ),
+            hovertemplate="<b>%{y}</b><br>Ticket médio: R$ %{x:,.0f}<extra></extra>",
+        ))
+        fig_ticket.add_vline(
+            x=ticket_medio_geral,
+            line_dash="dot",
+            line_color="#6B7280",
+            line_width=2,
+            annotation_text=f"Média geral<br>R$ {ticket_medio_geral / 1000:.0f}k",
+            annotation_position="top right",
+            annotation_font_color="#6B7280",
+            annotation_font_size=11,
         )
-        fig_ticket.update_traces(textposition="outside")
         fig_ticket.update_layout(
             showlegend=False,
-            coloraxis_showscale=False,
             xaxis_title="Ticket Médio (R$)",
             yaxis_title=None,
-            margin=dict(l=0, r=70, t=10, b=0),
+            margin=dict(l=0, r=80, t=20, b=0),
+            xaxis=dict(range=[0, ticket_ord["ticket"].max() * 1.3]),
         )
         st.plotly_chart(fig_ticket, use_container_width=True)
 
     st.divider()
-    st.subheader("Status por Modelo")
+    st.subheader("Distribuição de Status por Modelo")
 
     status_modelo = (
         df.groupby(["modelo", "status"])
         .size()
         .reset_index(name="total")
     )
+    # Ordenar modelos pelo total de leads (maior no topo)
+    ordem_modelos = (
+        status_modelo.groupby("modelo")["total"]
+        .sum()
+        .sort_values(ascending=True)
+        .index.tolist()
+    )
+    # Garantir ordem fixa dos status na legenda
+    ordem_status = ["Perdido", "Em negociação", "Vendido"]
     fig_status_mod = px.bar(
         status_modelo,
         x="total",
@@ -447,13 +502,20 @@ with tab_estoque:
         text="total",
         color_discrete_map=COR_STATUS,
         barmode="stack",
+        category_orders={"modelo": ordem_modelos, "status": ordem_status},
         labels={"total": "Quantidade", "modelo": "", "status": "Status"},
+        custom_data=["status"],
     )
-    fig_status_mod.update_traces(textposition="inside", textfont_size=11)
+    fig_status_mod.update_traces(
+        textposition="inside",
+        textfont_size=11,
+        hovertemplate="<b>%{y}</b><br>%{customdata[0]}: %{x}<extra></extra>",
+    )
     fig_status_mod.update_layout(
-        xaxis_title="Quantidade",
+        xaxis_title="Quantidade de Veículos",
         yaxis_title=None,
         legend_title=None,
-        margin=dict(l=0, r=20, t=10, b=0),
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+        margin=dict(l=0, r=20, t=40, b=0),
     )
     st.plotly_chart(fig_status_mod, use_container_width=True)
