@@ -229,88 +229,146 @@ with tab_leads:
 # ABA 3 — VENDEDORES
 # ══════════════════════════════════════════════════════════════════════════════
 with tab_vend:
-    col_a, col_b = st.columns(2)
+    META_VENDAS = 15
 
-    with col_a:
-        st.subheader("Ranking por Vendas")
-        ranking = (
-            vendidos.groupby("vendedor")
-            .size()
-            .sort_values(ascending=True)
-            .reset_index(name="vendas")
-        )
-        fig_rank = px.bar(
-            ranking,
-            x="vendas",
-            y="vendedor",
-            orientation="h",
-            text="vendas",
-            color="vendas",
-            color_continuous_scale="Blues",
-        )
-        fig_rank.update_traces(textposition="outside")
-        fig_rank.update_layout(
-            showlegend=False,
-            coloraxis_showscale=False,
-            xaxis_title="Vendas",
-            yaxis_title=None,
-            margin=dict(l=0, r=20, t=10, b=0),
-        )
-        st.plotly_chart(fig_rank, use_container_width=True)
-
-    with col_b:
-        st.subheader("Receita por Vendedor")
-        receita_vend = (
-            vendidos.groupby("vendedor")["valor"]
-            .sum()
-            .sort_values(ascending=True)
-            .reset_index(name="receita")
-        )
-        fig_rec = px.bar(
-            receita_vend,
-            x="receita",
-            y="vendedor",
-            orientation="h",
-            text=receita_vend["receita"].map(lambda v: f"R$ {v / 1e6:.2f}M"),
-            color="receita",
-            color_continuous_scale="Purples",
-        )
-        fig_rec.update_traces(textposition="outside")
-        fig_rec.update_layout(
-            showlegend=False,
-            coloraxis_showscale=False,
-            xaxis_title="Receita (R$)",
-            yaxis_title=None,
-            margin=dict(l=0, r=90, t=10, b=0),
-        )
-        st.plotly_chart(fig_rec, use_container_width=True)
-
-    st.divider()
-    st.subheader("Desempenho por Vendedor")
-
+    # Base de desempenho reutilizada em toda a aba
     leads_vend = df.groupby("vendedor").size().reset_index(name="leads")
     stats_vend = vendidos.groupby("vendedor").agg(
         vendas=("valor", "count"),
         receita=("valor", "sum"),
         ticket_medio=("valor", "mean"),
     ).reset_index()
-    desempenho = leads_vend.merge(stats_vend, on="vendedor", how="left")
-    desempenho["vendas"] = desempenho["vendas"].fillna(0).astype(int)
-    desempenho["receita"] = desempenho["receita"].fillna(0)
-    desempenho["conversao"] = desempenho["vendas"] / desempenho["leads"] * 100
+    desemp = leads_vend.merge(stats_vend, on="vendedor", how="left")
+    desemp["vendas"] = desemp["vendas"].fillna(0).astype(int)
+    desemp["receita"] = desemp["receita"].fillna(0)
+    desemp["ticket_medio"] = desemp["ticket_medio"].fillna(0)
+    desemp["conversao"] = desemp["vendas"] / desemp["leads"] * 100
+    desemp["bateu_meta"] = desemp["vendas"] >= META_VENDAS
 
-    tabela = desempenho[["vendedor", "leads", "vendas", "conversao", "receita", "ticket_medio"]].copy()
-    tabela["conversao"] = tabela["conversao"].map("{:.1f}%".format)
-    tabela["receita"] = tabela["receita"].map(lambda v: f"R$ {v:,.0f}".replace(",", "."))
-    tabela["ticket_medio"] = tabela["ticket_medio"].map(
-        lambda v: f"R$ {v:,.0f}".replace(",", ".") if pd.notna(v) else "-"
+    # ── KPIs ──────────────────────────────────────────────────────────────────
+    mv = desemp.loc[desemp["vendas"].idxmax()]
+    mr = desemp.loc[desemp["receita"].idxmax()]
+    mc = desemp.loc[desemp["conversao"].idxmax()]
+    qtd_meta = int(desemp["bateu_meta"].sum())
+
+    col1, col2, col3, col4 = st.columns(4)
+    col1.metric("Melhor Vendedor", mv["vendedor"], f"{mv['vendas']} vendas")
+    col2.metric(
+        "Maior Receita",
+        mr["vendedor"],
+        f"R$ {mr['receita']:,.0f}".replace(",", "."),
     )
-    tabela = tabela.rename(columns={
-        "vendedor": "Vendedor", "leads": "Leads", "vendas": "Vendas",
-        "conversao": "Conversão", "receita": "Receita", "ticket_medio": "Ticket Médio",
-    }).sort_values("Vendas", ascending=False)
+    col3.metric("Melhor Conversão", mc["vendedor"], f"{mc['conversao']:.1f}%")
+    col4.metric(
+        "Bateram a Meta",
+        f"{qtd_meta} / {len(desemp)}",
+        f"Meta: {META_VENDAS} vendas",
+    )
 
-    st.dataframe(tabela, use_container_width=True, hide_index=True)
+    st.divider()
+    col_a, col_b = st.columns(2)
+
+    with col_a:
+        st.subheader("Ranking por Vendas")
+        rank = desemp[["vendedor", "vendas", "bateu_meta"]].sort_values("vendas", ascending=True)
+        cores_rank = ["#22C55E" if b else "#94A3B8" for b in rank["bateu_meta"]]
+        fig_rank = go.Figure(go.Bar(
+            x=rank["vendas"],
+            y=rank["vendedor"],
+            orientation="h",
+            text=rank["vendas"],
+            textposition="outside",
+            marker_color=cores_rank,
+            hovertemplate="<b>%{y}</b><br>Vendas: %{x}<extra></extra>",
+        ))
+        fig_rank.add_vline(
+            x=META_VENDAS,
+            line_dash="dash",
+            line_color="#EF4444",
+            line_width=2,
+            annotation_text=f"Meta ({META_VENDAS})",
+            annotation_position="top right",
+            annotation_font_color="#EF4444",
+            annotation_font_size=12,
+        )
+        fig_rank.update_layout(
+            showlegend=False,
+            xaxis_title="Vendas",
+            yaxis_title=None,
+            margin=dict(l=0, r=40, t=20, b=0),
+            xaxis=dict(range=[0, rank["vendas"].max() * 1.25]),
+        )
+        st.plotly_chart(fig_rank, use_container_width=True)
+
+        # Legenda da cor
+        st.caption("🟢 Bateu a meta  |  ⚫ Abaixo da meta")
+
+    with col_b:
+        st.subheader("Receita por Vendedor")
+        rec = desemp[["vendedor", "receita"]].sort_values("receita", ascending=True)
+        fig_rec = go.Figure(go.Bar(
+            x=rec["receita"],
+            y=rec["vendedor"],
+            orientation="h",
+            text=[f"R$ {v / 1e6:.2f}M" for v in rec["receita"]],
+            textposition="outside",
+            marker=dict(
+                color=rec["receita"],
+                colorscale="Purples",
+                showscale=False,
+            ),
+            hovertemplate="<b>%{y}</b><br>Receita: R$ %{x:,.0f}<extra></extra>",
+        ))
+        fig_rec.update_layout(
+            showlegend=False,
+            xaxis_title="Receita (R$)",
+            yaxis_title=None,
+            margin=dict(l=0, r=100, t=20, b=0),
+            xaxis=dict(range=[0, rec["receita"].max() * 1.3]),
+        )
+        st.plotly_chart(fig_rec, use_container_width=True)
+
+    st.divider()
+    st.subheader("Desempenho Completo por Vendedor")
+
+    tabela_num = desemp[["vendedor", "leads", "vendas", "conversao", "receita", "ticket_medio", "bateu_meta"]].copy()
+    tabela_num["meta_status"] = tabela_num["bateu_meta"].map(lambda x: "✅ Sim" if x else "❌ Não")
+    tabela_num = tabela_num.rename(columns={
+        "vendedor": "Vendedor",
+        "leads": "Leads",
+        "vendas": "Vendas",
+        "conversao": "Conversão (%)",
+        "receita": "Receita Total (R$)",
+        "ticket_medio": "Ticket Médio (R$)",
+        "meta_status": f"Bateu Meta ({META_VENDAS})",
+    }).drop(columns="bateu_meta").sort_values("Vendas", ascending=False)
+
+    st.dataframe(
+        tabela_num,
+        use_container_width=True,
+        hide_index=True,
+        column_config={
+            "Vendas": st.column_config.ProgressColumn(
+                f"Vendas (meta {META_VENDAS})",
+                help=f"Barra mostra progresso em relação à meta de {META_VENDAS} vendas",
+                format="%d",
+                min_value=0,
+                max_value=META_VENDAS,
+            ),
+            "Conversão (%)": st.column_config.NumberColumn(
+                "Conversão (%)",
+                format="%.1f%%",
+            ),
+            "Receita Total (R$)": st.column_config.NumberColumn(
+                "Receita Total",
+                format="R$ %.0f",
+            ),
+            "Ticket Médio (R$)": st.column_config.NumberColumn(
+                "Ticket Médio",
+                format="R$ %.0f",
+            ),
+        },
+    )
 
 # ══════════════════════════════════════════════════════════════════════════════
 # ABA 4 — ESTOQUE
